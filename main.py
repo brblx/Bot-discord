@@ -1,6 +1,9 @@
 from discord.ext import commands
 import discord
+import os
 import random
+import requests
+
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -9,8 +12,21 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='$', intents=intents)
 
 @bot.event
-async def encendido():
+async def on_ready():
     print(f'Tu bot {bot.user} esta en linea')
+
+
+@bot.command()
+async def cmd(ctx):
+    await ctx.send("""
+$cmd
+$saludo
+$despedida "chao, bye, nos vemos"
+$roll XdY   (X, Y, valores a cambiar por numeros)
+$add x + y + ... + ... ... ...
+$memes
+$duck
+    """)
 
 @bot.command()
 async def saludo(ctx):
@@ -27,8 +43,6 @@ async def despedida(ctx, *, mensaje: str):
     elif 'nos vemos' in mensaje:
         await ctx.send('te cuidas')
 
-
-
 #Genera un dado y muestra los respectivos resultados de los dados
 @bot.command()
 async def roll(ctx, dice: str): #   $roll
@@ -40,8 +54,6 @@ async def roll(ctx, dice: str): #   $roll
 
     resultado = ', '.join(str(random.randint(1, caras_dado)) for r in range(dados_lanzados))
     await ctx.send(f' **Tus dados cayeron en:** {resultado}')
-
-
 
 #Agarra todos los numeros colocados y los deja en una lista, luego de eso suma todos los numeros
 @bot.command()
